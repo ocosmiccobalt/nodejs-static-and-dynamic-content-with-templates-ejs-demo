@@ -40,6 +40,8 @@ app.get('/restaurants/:id', (req, res) => {
       return res.render('restaurant-detail', { restaurant: restaurant });
     }
   }
+
+  res.render('404');
 });
 
 app.get('/recommend', (req, res) => {

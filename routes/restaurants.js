@@ -6,11 +6,34 @@ const resData = require('../util/restaurant-data');
 const router = express.Router();
 
 router.get('/restaurants', (req, res) => {
+  let order = req.query.order;
+  let nextOrder = 'desc';
+
+  if (order !== 'asc' && order !== 'desc') {
+    order = 'asc';
+  }
+
+  if (order === 'desc') {
+    nextOrder = 'asc';
+  }
+
   const storedRestaurants = resData.getStoredRestaurants();
+
+  storedRestaurants.sort((resA, resB) => {
+    if (
+      (order === 'asc' && resA.name > resB.name) ||
+      (order === 'desc' && resB.name > resA.name)
+    ) {
+      return 1;
+    }
+
+    return -1;
+  });
 
   res.render('restaurants', {
     numberOfRestaurants: storedRestaurants.length,
-    restaurants: storedRestaurants
+    restaurants: storedRestaurants,
+    nextOrder: nextOrder
   });
 });
 
